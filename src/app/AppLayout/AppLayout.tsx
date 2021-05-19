@@ -105,7 +105,7 @@ const AppLayout: React.FunctionComponent<IAppLayout> = ({ children }) => {
       header={Header}
       sidebar={Sidebar}
       onPageResize={onPageResize}
-      skipToContent={PageSkipToContent}>
+      skipToContent={null}>
       {children}
     </Page>
   );

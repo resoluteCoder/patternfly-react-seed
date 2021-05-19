@@ -4,12 +4,12 @@ import {
     PageSection, Title, Alert,
     AlertActionCloseButton, AlertActionLink
 } from '@patternfly/react-core';
-import ContainerList from './ContainerList';
+import ContainerTableList from './ContainerTableList';
 import ActionMenu from './ActionMenu';
 import axios from 'axios';
 
 const Dashboard = () => {
-    const [containers, setContainers] = useState();
+    const [containers, setContainers] = useState([]);
     const [containerData, setContainerData] = useState();
  
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -56,8 +56,8 @@ const Dashboard = () => {
               getContainerData={getContainerData}
               removeContainer={removeContainer}
           />
-        <ContainerList containers={containers}/>
-          {containerData ? <p>{JSON.stringify(containerData)}</p> : ''}
+        <ContainerTableList containers={containers}/>
+        {containerData ? <p>{JSON.stringify(containerData)}</p> : ''}
       </PageSection>
     )
 }

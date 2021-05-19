@@ -33,7 +33,8 @@ const ActionMenu = ({ createContainer, getContainerData, removeContainer }) => {
                         Inspect
                 </OptionsMenuItem>,
                 <OptionsMenuItem 
-                    onSelect={e => onSelect(e, removeContainer)} 
+                    //onSelect={e => onSelect(e, removeContainer)} 
+                    onSelect={e => onSelect(e, null)} 
                     isSelected={selectedOption === 'remove-container'} 
                     id='remove-container' 
                     key='option3'>

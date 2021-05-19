@@ -4,14 +4,18 @@ import {
     PageSection, Title, Alert,
     AlertActionCloseButton, AlertActionLink
 } from '@patternfly/react-core';
-import ContainerTableList from './ContainerTableList';
-import ActionMenu from './ActionMenu';
+import ContainerTable from './ContainerTable';
+//import ActionMenu from './ActionMenu';
+import ActionSelect from './ActionSelect';
 import axios from 'axios';
 
 const Dashboard = () => {
     const [containers, setContainers] = useState([]);
     const [containerData, setContainerData] = useState();
- 
+    const [containersToRemove, setContainersToRemove] = useState([]);
+
+    const [action, setAction] = useState();
+
     const [isAlertOpen, setIsAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
@@ -41,6 +45,14 @@ const Dashboard = () => {
         getContainers();
     }
 
+    const removeContainers = async () => {
+        const data = await axios.delete('http://localhost:3000/containers', 
+            {data: containersToRemove});
+        setIsAlertOpen(true);
+        setAlertMessage(`Removed Containers : ${data.data}`);
+        getContainers();
+    }
+
     useEffect(() => getContainers() ,[]);
 
     return (
@@ -48,16 +60,25 @@ const Dashboard = () => {
           {isAlertOpen ? <Alert
               variant='success'
               title={alertMessage}
-              actionClose={<AlertActionCloseButton onClose={()=> setIsAlertOpen(false)}/>}
+              actionClose={<AlertActionCloseButton 
+              onClose={()=> setIsAlertOpen(false)}/>}
           /> : ''}
-          <Title style={{textAlign: 'center', margin: '15px'}} headingLevel="h1" size="lg">Active Containers</Title>
-          <ActionMenu 
-              createContainer={createContainer}
-              getContainerData={getContainerData}
-              removeContainer={removeContainer}
+          <Title 
+              style={{textAlign: 'center', margin: '15px'}} 
+              headingLevel="h1" 
+              size="lg"
+          >
+            Container Dashboard
+          </Title>
+          <ActionSelect 
+              setAction={setAction}
+              removeContainers={removeContainers}
           />
-        <ContainerTableList containers={containers}/>
-        {containerData ? <p>{JSON.stringify(containerData)}</p> : ''}
+          {containers.length > 0 ? 
+            <ContainerTable containers={containers} action={action}
+                  setContainersToRemove={setContainersToRemove}/>
+                  : <h1 style={{textAlign: 'center'}}>No Containers available</h1>}
+          {containerData ? <p>{JSON.stringify(containerData)}</p> : ''}
       </PageSection>
     )
 }

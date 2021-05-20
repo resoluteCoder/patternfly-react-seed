@@ -25,8 +25,9 @@ const Dashboard = () => {
           .catch(err => console.log(err))
     }
 
-    const createContainer = async () => {
-        const data = await axios.post('http://localhost:3000/container');
+    const createContainer = async (container) => {
+        const data = await axios.post('http://localhost:3000/container', 
+            { name: container });
         setIsAlertOpen(true);
         setAlertMessage(`Created container : ${data.data}`);
         getContainers();
@@ -36,13 +37,6 @@ const Dashboard = () => {
         const data = await axios.get('http://localhost:3000/data');
         setContainerData(data.data[0]);
         console.log(data.data);
-    }
-
-    const removeContainer = async () => {
-        const data = await axios.delete('http://localhost:3000/container');
-        setIsAlertOpen(true);
-        setAlertMessage(`Removed Container : ${data.data}`);
-        getContainers();
     }
 
     const removeContainers = async () => {
@@ -72,8 +66,10 @@ const Dashboard = () => {
           </Title>
           <ActionSelect 
               setAction={setAction}
+              createContainer={createContainer}
               removeContainers={removeContainers}
           />
+          <br/>
           {containers.length > 0 ? 
             <ContainerTable containers={containers} action={action}
                   setContainersToRemove={setContainersToRemove}/>

@@ -44,7 +44,7 @@ const ContainerTable = ({ containers, action, setContainersToRemove }) => {
             const [id, image, name] = cells;
             return name;
         });
-    
+
     return (
         <>
             <Table

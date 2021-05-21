@@ -6,7 +6,11 @@ import {
 } from '@patternfly/react-core';
 
 
-const ContainerTable = ({ containers, action, setContainersToRemove }) => {
+const ContainerTable = props => {
+    const { 
+        containers, action, setCheckedContainers,
+        toggleContainerStatus
+    } = props;
     const columns = ['Id', 'Image', 'Name', 'State'];
     const defaultRows = containers.map(container => ({
         cells: [
@@ -15,10 +19,19 @@ const ContainerTable = ({ containers, action, setContainersToRemove }) => {
         ]
     }));
 
+    useEffect(()=> {
+        console.log('hey');
+        const updatedRows = rows.map(row => {
+            row.selected = false;
+            return row;
+        });
+        setRows(updatedRows);
+        setCheckedContainers(getCheckedContainers());
+    },[action])
+
     const [rows,setRows] = useState(defaultRows);
     
     useEffect(()=> {
-        console.log('test');
         setRows(defaultRows);
     },[containers])
 
@@ -35,7 +48,7 @@ const ContainerTable = ({ containers, action, setContainersToRemove }) => {
             localRows[rowId].selected = isSelected;
         }
         setRows(localRows);
-        setContainersToRemove(getCheckedContainers());
+        setCheckedContainers(getCheckedContainers());
     }
 
 
@@ -45,12 +58,22 @@ const ContainerTable = ({ containers, action, setContainersToRemove }) => {
             return name;
         });
 
+    const actions = (rowData) => {
+        return [{
+            title: 'Toggle State',
+            onClick: (e, rowId, rowData)=> 
+            toggleContainerStatus(rowData.name.title, rowData.state.title)
+        }]
+    }
+
     return (
         <>
             <Table
                 aria-label="Containers table"
-                onSelect={action == 'Remove' ? onSelect : null}
+                onSelect={action == 'Remove' | action == 'Inspect' 
+                    ? onSelect : null}
                 canSelectAll={true}
+                actions={action == 'Alter State' ? actions() : null}
                 variant='compact'
                 cells={columns}
                 rows={rows}

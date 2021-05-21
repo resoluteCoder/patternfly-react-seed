@@ -7,7 +7,8 @@ import {
 
 const ActionSelect = props => {
     const { 
-        setAction, removeContainers, createContainer
+        setAction, removeContainers, createContainer,
+        inspectContainers 
     } = props;
     const options = ['Create', 'Inspect', 'Alter State', 'Remove'];
     const [isOpen, toggleIsOpen] = useState(false);
@@ -62,6 +63,13 @@ const ActionSelect = props => {
                     variant="danger"
                     onClick={removeContainers}
                 >Remove</Button>}
+
+                {selected === 'Inspect' && 
+                <Button 
+                    variant="secondary"
+                    onClick={inspectContainers}
+                >Inspect</Button>}
+
                 {selected == 'Create' &&
                 <Form
                     onSubmit={onSubmit}
